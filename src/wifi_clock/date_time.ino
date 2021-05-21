@@ -1,11 +1,19 @@
 /*
- * Обновляет время из интернета с периодом NTP_SERVER_INTERVAL
+ * Обновляет время из интернета
  * Формат передачи в setTime - SEC, MIN, HOUR, DAY, MONTH, YEAR
  */
 void updateDateTime() {
-  if (internet_connected) { // и прошло NTP_SERVER_INTERVAL времени, с момента последнего обновления
-    // DateTime now = getDateTimeFromInternet();
-    // rtc.setTime(now.second, now.minute, now.hour, now.date, now.month, now.year); // установка даты и времени вручную
+  if (WiFi.status() == WL_CONNECTED) {
+    if (timeClient.update()) {
+      hrs = timeClient.getHours();
+      mins = timeClient.getMinutes();
+      secs = timeClient.getSeconds();
+      days = timeClient.getDay();
+
+      DateTime now = rtc.getTime();
+
+      rtc.setTime(secs, mins, hrs, now.date, now.month, now.year); // установка даты и времени вручную
+    }
   }
 }
 
@@ -39,6 +47,3 @@ void printTime() {
   Serial.print("/");
   Serial.println(now.year);
 }
-//DateTime getDateTimeFromInternet() {
-//  
-//}
