@@ -37,12 +37,14 @@ WiFiManager wifiManager;
 WiFiUDP Udp;
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, NTP_ADDRESS, GMT * 3600, NTP_INTERVAL);
+
 timer refreshTimer(NTP_INTERVAL);
 
 // ----------------- ПЕРЕМЕННЫЕ ----------------
 //boolean internet_connected = false;
 String clock_ip = "";
 unsigned int localPort = AP_PORT;
+unsigned int brightness; // яркость светодиодов
 byte hrs, mins, secs;
 byte days;
 
@@ -66,5 +68,7 @@ void loop() {
     updateDateTime();
   }
 
-  delay(1000);
+  delay(100);
+  
+  Serial.println(getBrightness());
 }
