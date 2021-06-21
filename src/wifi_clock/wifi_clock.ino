@@ -23,15 +23,31 @@
 #define AC_PASS "time_to_sleep"
 #define AP_PORT 8899
 
+// -------- МАТРИЦА ---------
+#define BRIGHTNESS 40         // стандартная маскимальная яркость (0-255)
+#define CURRENT_LIMIT 2000    // лимит по току в миллиамперах, автоматически управляет яркостью
+
+#define COLOR_ORDER RGB       // порядок цветов на ленте
+#define MATRIX_TYPE 0         // тип матрицы: 0 - зигзаг, 1 - параллельная
+#define CONNECTION_ANGLE 0    // угол подключения: 0 - левый нижний, 1 - левый верхний, 2 - правый верхний, 3 - правый нижний
+#define STRIP_DIRECTION 0     // направление ленты из угла: 0 - вправо, 1 - вверх, 2 - влево, 3 - вниз
+
+#define WIDTH 18              // ширина матрицы
+#define HEIGHT 14             // высота матрицы
+
+#define NUM_LEDS WIDTH * HEIGHT
+#define LED_PIN D4            // пин ленты
 // ---------------- БИБЛИОТЕКИ -----------------
-#include "microDS3231.h" // https://alexgyver.ru/microlibs/ + https://github.com/AlexGyver/GyverLibs/tree/master/microDS3231
-#include <WiFiManager.h> // https://github.com/tzapu/WiFiManager/tree/0.16.0
+#include "microDS3231.h"  // https://alexgyver.ru/microlibs/ + https://github.com/AlexGyver/GyverLibs/tree/master/microDS3231
+#include <WiFiManager.h>  // https://github.com/tzapu/WiFiManager/tree/0.16.0
 #include <WiFiUdp.h>
 #include <NTPClient.h>
+#include <FastLED.h>      // https://github.com/FastLED/FastLED
 
 #include "timer.h"
 
 // ------------------- ТИПЫ --------------------
+CRGB leds[NUM_LEDS];
 MicroDS3231 rtc;
 WiFiManager wifiManager;
 WiFiUDP Udp;
@@ -50,6 +66,8 @@ byte days;
 
 void setup() {
   Serial.begin(115200);
+
+  initialLED();
 
   connectToWiFi();
 
@@ -70,5 +88,9 @@ void loop() {
 
   delay(100);
   
-  Serial.println(getBrightness());
+//  Serial.println(getBrightness());
+
+//  leds[1] = CHSV(0, 255, 0);
+  leds[0] = CHSV(random(0, 255), 255, 255); FastLED.show(); delay(30);
+//  leds[0] = CRGB::Black; FastLED.show(); delay(30);
 }
