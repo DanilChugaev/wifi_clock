@@ -1,5 +1,7 @@
 /*
  * Инициализирует ленту
+ * 
+ * @return {void}
  */
 void initialLED() {
   FastLED.addLeds<WS2812B, LED_PIN, COLOR_ORDER>(leds, NUM_LEDS);

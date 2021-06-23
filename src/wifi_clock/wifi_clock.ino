@@ -24,13 +24,10 @@
 #define AP_PORT 8899
 
 // -------- МАТРИЦА ---------
-#define BRIGHTNESS 40         // стандартная маскимальная яркость (0-255)
+#define BRIGHTNESS 20         // стандартная маскимальная яркость (0-255)
 #define CURRENT_LIMIT 2000    // лимит по току в миллиамперах, автоматически управляет яркостью
 
 #define COLOR_ORDER RGB       // порядок цветов на ленте
-#define MATRIX_TYPE 0         // тип матрицы: 0 - зигзаг, 1 - параллельная
-#define CONNECTION_ANGLE 0    // угол подключения: 0 - левый нижний, 1 - левый верхний, 2 - правый верхний, 3 - правый нижний
-#define STRIP_DIRECTION 0     // направление ленты из угла: 0 - вправо, 1 - вверх, 2 - влево, 3 - вниз
 
 #define WIDTH 18              // ширина матрицы
 #define HEIGHT 14             // высота матрицы
@@ -80,17 +77,26 @@ void setup() {
 }
 
 void loop() {
-  // обновляем время с сервера у модуля часов,
-  // когда пройдет NTP_INTERVAL, с момента последнего обновления
+  /**
+   * Обновляем время с сервера у модуля часов,
+   * когда пройдет NTP_INTERVAL, с момента последнего обновления
+   */
   if (refreshTimer.isReady()) {
     updateDateTime();
   }
 
-  delay(100);
+//  delay(100);
   
 //  Serial.println(getBrightness());
 
 //  leds[1] = CHSV(0, 255, 0);
-  leds[0] = CHSV(random(0, 255), 255, 255); FastLED.show(); delay(30);
-//  leds[0] = CRGB::Black; FastLED.show(); delay(30);
+//  for (int i = 0; i < NUM_LEDS; i++) {
+//    leds[i] = CRGB(0, 0, 255);
+//    FastLED.show();
+//    delay(300);
+//  }
+  leds[getPosition(0, 1)] = CRGB(0, 255, 0);
+  leds[getPosition(0, 2)] = CRGB(255, 255, 0);
+  leds[getPosition(1, 2)] = CRGB(255, 255, 0);
+  FastLED.show();
 }

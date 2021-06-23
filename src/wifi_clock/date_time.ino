@@ -1,6 +1,8 @@
 /*
  * Обновляет время из интернета
  * Формат передачи в setTime - SEC, MIN, HOUR, DAY, MONTH, YEAR
+ * 
+ * @return {void}
  */
 void updateDateTime() {
   if (WiFi.status() == WL_CONNECTED) {
@@ -19,7 +21,9 @@ void updateDateTime() {
 
 /*
  * Получает время из модуля часов и учитывает смещение часового пояса
- * @param {int8_t} time_shift
+ * 
+ * @param {int8_t} time_shift - смещение часового пояса
+ * 
  * @return {DateTime}
  */
 DateTime getTimeFromRTC(int8_t time_shift = 0) {
