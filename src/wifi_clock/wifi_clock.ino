@@ -4,11 +4,6 @@
  * Автор проекта Данил Чугаев
  */
 
-// TODO: схему проекта поместить в корень проекта
-// TODO: описать редми
-// TODO: приложение для андроид (исходники и .apk файл возможно и ios), 
-//   сделанное в https://thunkable.com, поместить в android (ios) папку в корень проекта
-
 // ============= НАСТРОЙКИ =============
 
 // -------- ВРЕМЯ -------
@@ -42,6 +37,7 @@
 #include <FastLED.h>      // https://github.com/FastLED/FastLED
 
 #include "timer.h"
+#include "clock.h"
 
 // ------------------- ТИПЫ --------------------
 CRGB leds[NUM_LEDS];
@@ -52,6 +48,8 @@ WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, NTP_ADDRESS, GMT * 3600, NTP_INTERVAL);
 
 timer refreshTimer(NTP_INTERVAL);
+MegaClock nskClock(1, 1);
+MegaClock mskClock(1, 1, -4);
 
 // ----------------- ПЕРЕМЕННЫЕ ----------------
 //boolean internet_connected = false;
@@ -85,7 +83,11 @@ void loop() {
     updateDateTime();
   }
 
-//  delay(100);
+  DateTime now = rtc.getTime();
+  nskClock.update(now);
+  mskClock.update(now);
+
+  delay(100);
   
 //  Serial.println(getBrightness());
 
@@ -95,8 +97,8 @@ void loop() {
 //    FastLED.show();
 //    delay(300);
 //  }
-  leds[getPosition(0, 1)] = CRGB(0, 255, 0);
-  leds[getPosition(0, 2)] = CRGB(255, 255, 0);
-  leds[getPosition(1, 2)] = CRGB(255, 255, 0);
-  FastLED.show();
+//  leds[getPosition(0, 1)] = CRGB(0, 255, 0);
+//  leds[getPosition(0, 2)] = CRGB(255, 255, 0);
+//  leds[getPosition(1, 2)] = CRGB(255, 255, 0);
+//  FastLED.show();
 }
