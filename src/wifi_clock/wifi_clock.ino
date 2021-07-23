@@ -22,7 +22,7 @@
 #define BRIGHTNESS 20         // стандартная маскимальная яркость (0-255)
 #define CURRENT_LIMIT 2000    // лимит по току в миллиамперах, автоматически управляет яркостью
 
-#define COLOR_ORDER RGB       // порядок цветов на ленте
+#define COLOR_ORDER GRB       // порядок цветов на ленте
 
 #define WIDTH 18              // ширина матрицы
 #define HEIGHT 14             // высота матрицы
@@ -48,8 +48,8 @@ WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, NTP_ADDRESS, GMT * 3600, NTP_INTERVAL);
 
 timer refreshTimer(NTP_INTERVAL);
-MegaClock nskClock(1, 1);
-MegaClock mskClock(1, 1, -4);
+MegaClock nskClock(leds, 1, 1, 0, CRGB(0, 255, 0));
+//MegaClock mskClock(leds, 1, 1, -4);
 
 // ----------------- ПЕРЕМЕННЫЕ ----------------
 //boolean internet_connected = false;
@@ -85,7 +85,9 @@ void loop() {
 
   DateTime now = rtc.getTime();
   nskClock.update(now);
-  mskClock.update(now);
+//  mskClock.update(now);
+
+  FastLED.show();
 
   delay(100);
   

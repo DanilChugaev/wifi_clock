@@ -10,6 +10,6 @@ void connectToWiFi() {
   wifiManager.autoConnect(AC_SSID, AC_PASS);
   clock_ip = WiFi.localIP().toString();
 
-  Serial.print("Connected! IP address: ");
-  Serial.println(clock_ip);
+//  Serial.print("Connected! IP address: ");
+//  Serial.println(clock_ip);
 }
