@@ -53,11 +53,10 @@ MegaDigit::MegaDigit(CRGB *leds, uint8_t width, uint8_t height, CRGB color) {
  * @return {void}
  */
 void MegaDigit::create(int8_t n, uint8_t x, uint8_t y) {
-  Serial.println(n);
-//  Serial.print("--");
-//  Serial.print(x);
-//  Serial.print("--");
-//  Serial.println(y);
+  Serial.print("n--");
+  Serial.print(n);
+  Serial.println("--");
+
   switch(n) {
     case 0:
       _createZero(x, y);
@@ -98,10 +97,10 @@ void MegaDigit::create(int8_t n, uint8_t x, uint8_t y) {
     case 9:
       _createNine(x, y);
       break;
-      
-    default:
-      _createZero(x, y);
-      break;
+
+//    default:
+//      _createZero(x, y);
+//      break;
   }
 }
 

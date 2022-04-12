@@ -41,7 +41,6 @@
 
 // ------------------- ТИПЫ --------------------
 CRGB leds[NUM_LEDS];
-MicroDS3231 rtc;
 WiFiManager wifiManager;
 WiFiUDP Udp;
 WiFiUDP ntpUDP;
@@ -49,7 +48,7 @@ NTPClient timeClient(ntpUDP, NTP_ADDRESS, GMT * 3600, NTP_INTERVAL);
 
 timer refreshTimer(NTP_INTERVAL);
 MegaClock nskClock(leds, 1, 1, 0, CRGB(0, 255, 0));
-//MegaClock mskClock(leds, 1, 8, TIME_SHIFT, CRGB(0, 0, 255));
+MegaClock mskClock(leds, 1, 8, TIME_SHIFT, CRGB(0, 0, 255));
 
 // ----------------- ПЕРЕМЕННЫЕ ----------------
 //boolean internet_connected = false;
@@ -58,6 +57,9 @@ unsigned int localPort = AP_PORT;
 unsigned int brightness; // яркость светодиодов
 byte hrs, mins, secs;
 byte days;
+
+// для обновления времени в rtc
+DateTime rtcNow;
 
 void setup() {
   Serial.begin(115200);
@@ -81,25 +83,10 @@ void loop() {
     updateDateTime();
   }
 
-  DateTime now = rtc.getTime();
-//  nskClock.update(now.hour, now.minute);
-  nskClock.update(23, now.minute);
-  //mskClock.update(now.hour, now.minute);
+  nskClock.update();
+  mskClock.update();
 
   FastLED.show();
 
   delay(100);
-  
-//  Serial.println(getBrightness());
-
-//  leds[1] = CHSV(0, 255, 0);
-//  for (int i = 0; i < NUM_LEDS; i++) {
-//    leds[i] = CRGB(0, 0, 255);
-//    FastLED.show();
-//    delay(300);
-//  }
-//  leds[getPosition(0, 1)] = CRGB(0, 255, 0);
-//  leds[getPosition(0, 2)] = CRGB(255, 255, 0);
-//  leds[getPosition(1, 2)] = CRGB(255, 255, 0);
-//  FastLED.show();
 }

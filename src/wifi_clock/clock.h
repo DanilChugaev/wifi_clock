@@ -1,11 +1,12 @@
 #include "digit.h"
+MicroDS3231 rtc;
 
 /** Класс вывода часов на дисплее */
 class MegaClock
 {
   public:
     MegaClock(CRGB *leds, uint8_t x, uint8_t y, int8_t time_shift, CRGB color);
-    void update(int8_t hour, int8_t minute);
+    void update();
 
   private:
     uint8_t _width;
@@ -17,7 +18,9 @@ class MegaClock
     uint8_t _y = 0;
     int8_t _time_shift;
     CRGB _color;
+    DateTime _nowDateTime;
     void _createNumber(int8_t number, uint8_t x, uint8_t y);
+    void _getTimeFromRTC(int8_t time_shift);
     MegaDigit *_digit;
 };
 
@@ -34,38 +37,52 @@ MegaClock::MegaClock(CRGB *leds, uint8_t x, uint8_t y, int8_t time_shift, CRGB c
   _y = y;
   _time_shift = time_shift;
   _color = color;
-  
-  _width = 3;
-  _height = 5;
-  _minutePosition = (_width * 2) + 3;
-  _nextNumberPosition = _width + 1;
+  _width = 3;       // ширина цифры
+  _height = 5;      // высота цифры
+  _minutePosition = (_width * 2) + 3;   // позиция минут относительно часов
+  _nextNumberPosition = _width + 1;     // позиция рядом стоящей цыфры
 
   // объявляем объект класса MegaDigit
   _digit = new MegaDigit(leds, _width, _height, _color);
 }
 
 /** Обновляет состояние часов */
-void MegaClock::update(int8_t hour, int8_t minute) {
-//  now.hour += _time_shift;
-
+void MegaClock::update() {
+  _getTimeFromRTC(_time_shift);
 //  Serial.print(hour);
 //  Serial.print("---");
 //  Serial.println(minute);
 
-  _createNumber(hour, _x, _y);
-  _createNumber(minute, _x + _minutePosition, _y);
+  _createNumber(_nowDateTime.hour, _x, _y);
+  _createNumber(_nowDateTime.minute, _x + _minutePosition, _y);
 }
 
 void MegaClock::_createNumber(int8_t number, uint8_t x, uint8_t y) {
   itoa(number, _cstr, DEC);  // переводим число в строку
 
   if (strlen(_cstr) == 2) {
-//    _digit->create(_cstr[0], x, y);
-//    _digit->create(_cstr[1], x + _nextNumberPosition, y);
+    _digit->create(_cstr[0], x, y);
+    _digit->create(_cstr[1], x + _nextNumberPosition, y);
 //    _digit->create(1, x, y);
-    _digit->create(2, x + _nextNumberPosition, y);
+//    _digit->create(2, x + _nextNumberPosition, y);
   } else {
     _digit->create(0, x, y);
     _digit->create(_cstr[0], x + _nextNumberPosition, y);
   }
+}
+
+/*
+ * Получает время из модуля часов и учитывает смещение часового пояса
+ * 
+ * @global_class rtc
+ * @global_class DateTime
+ * 
+ * @param {int8_t} time_shift - смещение часового пояса
+ * 
+ * @return {DateTime}
+ */
+void MegaClock::_getTimeFromRTC(int8_t time_shift = 0) {
+  _nowDateTime = rtc.getTime();
+
+  _nowDateTime.hour += time_shift;
 }
