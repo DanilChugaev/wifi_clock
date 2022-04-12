@@ -3,7 +3,7 @@ class MegaDigit
 {
   public:
     MegaDigit(CRGB *leds, uint8_t width, uint8_t height, CRGB color);
-    void create(int8_t n, uint8_t x, uint8_t y);
+    void create(int n, uint8_t x, uint8_t y);
 
   private:
     CRGB *_leds;
@@ -52,11 +52,7 @@ MegaDigit::MegaDigit(CRGB *leds, uint8_t width, uint8_t height, CRGB color) {
  *
  * @return {void}
  */
-void MegaDigit::create(int8_t n, uint8_t x, uint8_t y) {
-  Serial.print("n--");
-  Serial.print(n);
-  Serial.println("--");
-
+void MegaDigit::create(int n, uint8_t x, uint8_t y) {
   switch(n) {
     case 0:
       _createZero(x, y);

@@ -13,7 +13,7 @@ class MegaClock
     uint8_t _height;
     uint8_t _minutePosition;
     uint8_t _nextNumberPosition;
-    char _cstr[2];        // выделяем место под число в строке
+    String _str;  // выделяем место под число в строке
     uint8_t _x = 0;
     uint8_t _y = 0;
     int8_t _time_shift;
@@ -49,25 +49,23 @@ MegaClock::MegaClock(CRGB *leds, uint8_t x, uint8_t y, int8_t time_shift, CRGB c
 /** Обновляет состояние часов */
 void MegaClock::update() {
   _getTimeFromRTC(_time_shift);
-//  Serial.print(hour);
+//  Serial.print(_nowDateTime.hour);
 //  Serial.print("---");
-//  Serial.println(minute);
+//  Serial.println(_nowDateTime.minute);
 
   _createNumber(_nowDateTime.hour, _x, _y);
   _createNumber(_nowDateTime.minute, _x + _minutePosition, _y);
 }
 
 void MegaClock::_createNumber(int8_t number, uint8_t x, uint8_t y) {
-  itoa(number, _cstr, DEC);  // переводим число в строку
+  _str = String(number);
 
-  if (strlen(_cstr) == 2) {
-    _digit->create(_cstr[0], x, y);
-    _digit->create(_cstr[1], x + _nextNumberPosition, y);
-//    _digit->create(1, x, y);
-//    _digit->create(2, x + _nextNumberPosition, y);
+  if (_str.length() == 2) {
+    _digit->create(_str.substring(0, 1).toInt(), x, y);
+    _digit->create(_str.substring(1, 2).toInt(), x + _nextNumberPosition, y);
   } else {
     _digit->create(0, x, y);
-    _digit->create(_cstr[0], x + _nextNumberPosition, y);
+    _digit->create(_str.substring(0, 1).toInt(), x + _nextNumberPosition, y);
   }
 }
 

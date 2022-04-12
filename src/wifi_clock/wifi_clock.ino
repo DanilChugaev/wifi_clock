@@ -14,8 +14,8 @@
 #define DISPLAY_INTERVAL 1000                 // обновление времени на дисплее (1 секунда)
 
 // -------- Менеджер WiFi ---------
-#define AC_SSID "WiFi_Clock"
-#define AC_PASS "time_to_sleep"
+#define AC_SSID "TP-Link_BCEB"
+#define AC_PASS "21285967"
 #define AP_PORT 8899
 
 // -------- МАТРИЦА ---------
@@ -47,8 +47,8 @@ WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, NTP_ADDRESS, GMT * 3600, NTP_INTERVAL);
 
 timer refreshTimer(NTP_INTERVAL);
-MegaClock nskClock(leds, 1, 1, 0, CRGB(0, 255, 0));
-MegaClock mskClock(leds, 1, 8, TIME_SHIFT, CRGB(0, 0, 255));
+MegaClock nskClock(leds, 1, 8, 0, CRGB(0, 255, 0));
+MegaClock mskClock(leds, 1, 1, TIME_SHIFT, CRGB(0, 0, 255));
 
 // ----------------- ПЕРЕМЕННЫЕ ----------------
 //boolean internet_connected = false;
@@ -82,6 +82,8 @@ void loop() {
   if (refreshTimer.isReady()) {
     updateDateTime();
   }
+
+  FastLED.clear();
 
   nskClock.update();
   mskClock.update();
