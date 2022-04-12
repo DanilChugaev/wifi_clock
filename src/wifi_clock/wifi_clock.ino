@@ -19,7 +19,7 @@
 #define AP_PORT 8899
 
 // -------- МАТРИЦА ---------
-#define BRIGHTNESS 20         // стандартная маскимальная яркость (0-255)
+#define BRIGHTNESS 5         // стандартная маскимальная яркость (0-255)
 #define CURRENT_LIMIT 2000    // лимит по току в миллиамперах, автоматически управляет яркостью
 
 #define COLOR_ORDER GRB       // порядок цветов на ленте
@@ -49,7 +49,7 @@ NTPClient timeClient(ntpUDP, NTP_ADDRESS, GMT * 3600, NTP_INTERVAL);
 
 timer refreshTimer(NTP_INTERVAL);
 MegaClock nskClock(leds, 1, 1, 0, CRGB(0, 255, 0));
-//MegaClock mskClock(leds, 1, 1, -4);
+//MegaClock mskClock(leds, 1, 8, TIME_SHIFT, CRGB(0, 0, 255));
 
 // ----------------- ПЕРЕМЕННЫЕ ----------------
 //boolean internet_connected = false;
@@ -63,14 +63,12 @@ void setup() {
   Serial.begin(115200);
 
   initialLED();
-
   connectToWiFi();
 
   Serial.printf("UDP server on port %d\n", localPort);
   Udp.begin(localPort);
 
   timeClient.begin();
-
   updateDateTime();
 }
 
@@ -84,8 +82,9 @@ void loop() {
   }
 
   DateTime now = rtc.getTime();
-  nskClock.update(now);
-//  mskClock.update(now);
+//  nskClock.update(now.hour, now.minute);
+  nskClock.update(23, now.minute);
+  //mskClock.update(now.hour, now.minute);
 
   FastLED.show();
 
