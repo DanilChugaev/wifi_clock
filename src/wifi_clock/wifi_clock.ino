@@ -54,7 +54,9 @@ MegaClock mskClock(leds, 1, 1, TIME_SHIFT, CRGB(0, 0, 255));
 //boolean internet_connected = false;
 String clock_ip = "";
 unsigned int localPort = AP_PORT;
-unsigned int brightness; // яркость светодиодов
+unsigned int brightness = 2;  // яркость светодиодов
+unsigned int smoothing = 100; // делим на это число, чтобы сгладить колебания итоговой яркости с датчика
+unsigned int increase = 20;   // на это число умножаем сглаженное значение яркости, чтобы выровнять до нормальных значений яркости светодиодов
 byte hrs, mins, secs;
 byte days;
 
@@ -87,6 +89,7 @@ void loop() {
 
   nskClock.update();
   mskClock.update();
+  updateBrightness();
 
   FastLED.show();
 

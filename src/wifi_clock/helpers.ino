@@ -54,7 +54,7 @@ unsigned int getBrightness() {
  * @global_var COLOR_ORDER
  * @global_var leds
  * @global_var NUM_LEDS
- * @global_var BRIGHTNESS
+
  * @global_var CURRENT_LIMIT
  * 
  * @global_class FastLED
@@ -63,11 +63,24 @@ unsigned int getBrightness() {
  */
 void initialLED() {
   FastLED.addLeds<WS2812B, LED_PIN, COLOR_ORDER>(leds, NUM_LEDS);
-  FastLED.setBrightness(BRIGHTNESS);
+  updateBrightness();
   
   if (CURRENT_LIMIT > 0) FastLED.setMaxPowerInVoltsAndMilliamps(5, CURRENT_LIMIT);
   
   FastLED.show();
+}
+
+/*
+ * Обновляет яркость светодиодов
+ *
+ * @global_var brightness
+ */
+void updateBrightness() {
+  brightness = int(floor(getBrightness() / smoothing)) * increase;
+  
+  Serial.println(brightness);
+
+  FastLED.setBrightness(brightness);
 }
 
 /*
