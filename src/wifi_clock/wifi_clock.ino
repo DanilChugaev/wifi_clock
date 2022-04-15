@@ -58,7 +58,6 @@ EncButton2<EB_ENCBTN> enc(INPUT, D7, D6, D5); // https://github.com/GyverLibs/En
 String clock_ip = "";
 unsigned int localPort = AP_PORT;
 unsigned int brightness = 2;  // яркость светодиодов
-unsigned int increase = 20;   // на это число умножаем сглаженное значение яркости, чтобы выровнять до нормальных значений яркости светодиодов
 unsigned int smoothing = 50; // делим на это число, чтобы сгладить колебания итоговой яркости с датчика
 unsigned int increase = 10;   // на это число умножаем сглаженное значение яркости, чтобы выровнять до нормальных значений яркости светодиодов
 byte hrs, mins, secs;
