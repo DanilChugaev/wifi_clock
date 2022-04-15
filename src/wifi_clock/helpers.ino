@@ -76,9 +76,14 @@ void initialLED() {
  * @global_var brightness
  */
 void updateBrightness() {
-  brightness = int(floor(getBrightness() / smoothing)) * increase;
-  
-  Serial.println(brightness);
+  if (encoderValue == 0) {
+    brightness = int(round(getBrightness() / smoothing)) * increase;
+//    Serial.println(brightness);
+  } else {
+    brightness = encoderValue;
+  }
+
+  brightness = brightness == 0 ? 5 : brightness;
 
   FastLED.setBrightness(brightness);
 }
