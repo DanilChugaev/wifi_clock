@@ -84,12 +84,24 @@ void setup() {
 void loop() {
   enc.tick();
 
-  if (enc.left() && encoderValue >= 5) {
-    encoderValue = encoderValue - 5;
+  if (enc.left()) {
+    if (encoderValue >= 1 && encoderValue <= 20) {
+      encoderValue = encoderValue - 1;
+    }
+    
+    if (encoderValue >= 25) {
+      encoderValue = encoderValue - 5;
+    }
   }
   
-  if (enc.right() && encoderValue < 255) {
-    encoderValue = encoderValue + 5;
+  if (enc.right()) {
+    if (encoderValue >= 0 && encoderValue <= 20) {
+      encoderValue = encoderValue + 1;
+    }
+    
+    if (encoderValue > 20) {
+      encoderValue = encoderValue + 5;
+    }
   }
   
   /**
